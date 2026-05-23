@@ -1,0 +1,6 @@
+python-telegram-bot
+easyocr
+opencv-python-headless
+numpy
+python-dotenv
+Flask
