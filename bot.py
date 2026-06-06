@@ -3,23 +3,14 @@ import re
 import cv2
 import easyocr
 import numpy as np
-import os
-from dotenv import load_dotenv
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters, CommandHandler
 
-# ហៅការរៀបចំពីឯកសារ keep_alive.py (សម្រាប់ hosting 24h)
-from keep_alive import keep_alive
+# --- កំណត់ព័ត៌មាន Bot របស់អ្នក ---
+BOT_TOKEN = '8726446573:AAGlSh4ZrIOJIeeP53CS8O27AIJqSgIxai8'
+BOT_USERNAME = 'autosenderBaggage_phone_bot' # ឈ្មោះ Bot របស់អ្នក ដោយគ្មានសញ្ញា @
+GROUP_CHAT_ID = '-5116254772' 
 
-# អានទិន្នន័យពីឯកសារ .env (សម្រាប់ពេលសាកល្បងលើកុំព្យូទ័រ)
-load_dotenv()
-
-# --- ទាញយកព័ត៌មានពី Environment Variables ---
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-BOT_USERNAME = os.getenv('BOT_USERNAME') 
-GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
-
-# កំណត់ EasyOCR សម្រាប់អានអក្សរពីរូបភាព
 reader = easyocr.Reader(['en'], gpu=False)
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -134,14 +125,11 @@ async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("🙏 អរគុណច្រើន! ទីតាំងរបស់អ្នកត្រូវបានបញ្ជូនទៅភ្នាក់ងារដឹកជញ្ជូនរួចរាល់ហើយ។", reply_markup=ReplyKeyboardRemove())
 
 if __name__ == '__main__':
-    # បើក Web Server ឱ្យដំណើរការ (កុំភ្លេចត្រូវមានឯកសារ keep_alive.py)
-    keep_alive()
-    
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
-    app.add_handler(MessageHandler(filters.CONTACT, handle_contact))
+    app.add_handler(MessageHandler(filters.CONTACT, handle_contact)) # បន្ថែម Handler សម្រាប់ Contact
     app.add_handler(MessageHandler(filters.LOCATION, handle_location))
     
-    print("🚀 Bot កំពុងដំណើរការជាមួយប្រព័ន្ធផ្ទៀងផ្ទាត់លេខសម្ងាត់ និង Web Server...")
+    print("🚀 Bot កំពុងដំណើរការជាមួយប្រព័ន្ធផ្ទៀងផ្ទាត់លេខសម្ងាត់...")
     app.run_polling()
