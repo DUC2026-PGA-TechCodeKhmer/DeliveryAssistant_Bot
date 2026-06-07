@@ -1,6 +1,3 @@
-python-telegram-bot
-easyocr
-opencv-python-headless
-numpy
-python-dotenv
-Flask
+python-telegram-bot[webhooks]==20.8
+aiohttp==3.9.3
+firebase-admin==6.4.0
